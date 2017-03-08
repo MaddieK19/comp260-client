@@ -1,6 +1,7 @@
 
 class Game 
 {
+	Grid gameMap;
        
     /**
      * Main method to start the game.
@@ -15,7 +16,7 @@ class Game
      */
     public Game() 
     {
-        
+    	gameMap = new Grid();
     }
 
     /**
