@@ -8,7 +8,7 @@ public class Grid {
 			for (int y = 0; y < cells[0].length; y++) {
 				cells[x][y] = new Cell(Cell.CellStates.EMPTY);
 			}
-			System.out.println(x);
+			//System.out.println(x);
 		}
 	}
 

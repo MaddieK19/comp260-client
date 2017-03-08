@@ -1,4 +1,4 @@
-
+import org.lwjgl.Version;
 class Game 
 {
 	Grid gameMap;
@@ -24,7 +24,7 @@ class Game
      */
     public void play() 
     {            
-        
+    	System.out.println("LWJGL Version " + Version.getVersion() + " is working.");
     }
         
 
