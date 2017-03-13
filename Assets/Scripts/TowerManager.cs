@@ -5,14 +5,16 @@ using UnityEngine;
 public class TowerManager : MonoBehaviour {
     public List<GameObject> towers;
     public GameObject towerPrefab;
+    public GameObject player;
     int maxTowerNumber = 10;
-    public string key = "a";
+    public string key = "q";
 
-    private PlayerController player;
+    //private PlayerController player;
 
     // Use this for initialization
     void Start () {
-        player = GetComponent<PlayerController>();
+        //player = GetComponent<PlayerController>();
+        towers = new List<GameObject>();
     }
 	
 	// Update is called once per frame
@@ -22,8 +24,9 @@ public class TowerManager : MonoBehaviour {
 
     void addTower(Vector3 towerPosition)
     {
-        GameObject newTower = Instantiate(towerPrefab, towerPosition, Quaternion.identity) as GameObject;
-        towers.Add(newTower);
+        Debug.Log("Adding tower");
+        GameObject newTower = (GameObject)Instantiate(towerPrefab, towerPosition, Quaternion.identity);
+        towers.Add(towerPrefab);
     }
 
     void destroyTower()
@@ -35,7 +38,7 @@ public class TowerManager : MonoBehaviour {
     {
         if (Input.GetKeyDown(key))
         {
-            addTower(player.transform.position);
+            addTower(player.transform.position);            
         }
     }
 }
