@@ -36,9 +36,20 @@ public class TowerManager : MonoBehaviour {
 
     void checkForInput()
     {
-        if (Input.GetKeyDown(key))
+        if (Input.GetKeyDown(key) && towers.Count < maxTowerNumber)
         {
             addTower(player.transform.position);            
+        }
+    }
+
+    void checkTowerState()
+    {
+        for (int i = 0; i < towers.Count; i++)
+        {
+            if (towers[i].GetComponent<Tower>().getHealth() < 1)
+            {
+                towers.RemoveAt(i);
+            }
         }
     }
 }
