@@ -4,11 +4,10 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-
+    // float for players movement speed
     public float speed;
-
+    //
     private Rigidbody2D rb2d;
-    private int count;
 
     // Use this for initialization
     void Start()
@@ -16,8 +15,8 @@ public class PlayerController : MonoBehaviour
         rb2d = GetComponent<Rigidbody2D>();
 
     }
-
-    //FixedUpdate is called at a fixed interval and is independent of frame rate. Put physics code here.
+    
+    // TODO: change movement to not use forces
     void FixedUpdate()
     {
         //Store the current horizontal input in the float moveHorizontal.

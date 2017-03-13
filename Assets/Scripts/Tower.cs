@@ -1,6 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+/*
+ * Tower class 
+ * 
+ */
+
 
 public class Tower : MonoBehaviour
 {

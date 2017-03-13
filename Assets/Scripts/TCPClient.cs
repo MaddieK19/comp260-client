@@ -4,9 +4,11 @@ using System.Net;
 using System.Net.Sockets;
 using UnityEngine;
 
-
+/*
+ *  TCPClient class that connects to the specified server
+ */
 public class TCPClient : MonoBehaviour {
-    private int portNumber =2222;
+    private int portNumber = 2222;
     private string host = "localhost";
     TcpClient client;
     public bool connected = false;
