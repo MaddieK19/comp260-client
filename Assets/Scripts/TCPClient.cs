@@ -1,18 +1,28 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Net;
+using System.Net.Sockets;
 using UnityEngine;
 
 
 public class TCPClient : MonoBehaviour {
-    private int socketNumber;
+    private int portNumber =2222;
     private string host = "localhost";
-    TCPClient client;
+    TcpClient client;
+    public bool connected = false;
 
     // Use this for initialization
     void Start () {
-        client = new TCPClient();
-        client.socketNumber = socketNumber;
-        client.host = host;
+        try
+        {
+            client = new TcpClient(host, portNumber);
+            connected = true;
+        }
+        catch (SocketException)
+        {
+            Debug.Log("Unable to connect to server");
+            return;
+        }
     }
 	
 	// Update is called once per frame

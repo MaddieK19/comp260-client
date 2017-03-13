@@ -17,8 +17,8 @@ public class TowerManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
-	}
+        checkForInput();
+    }
 
     void addTower(Vector3 towerPosition)
     {
@@ -28,7 +28,7 @@ public class TowerManager : MonoBehaviour {
 
     void destroyTower()
     {
-
+        // TODO
     }
 
     void checkForInput()
