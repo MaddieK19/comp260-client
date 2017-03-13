@@ -7,14 +7,13 @@ using UnityEngine;
  */
 public class GameState : MonoBehaviour {
     public GameObject player;
-    public GameObject[] towers;
+    public TowerManager towerManager;
 
     Vector3 playerPreviousLocation;
 
 	// Use this for initialization
 	void Start () {
         playerPreviousLocation = new Vector3(0,0,0);
-
     }
 	
 	// Update is called once per frame

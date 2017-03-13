@@ -8,28 +8,30 @@ using UnityEngine;
  *  TCPClient class that connects to the specified server
  */
 public class TCPClient : MonoBehaviour {
+    // int for the portnumber the client will connect to
     private int portNumber = 2222;
     private string host = "localhost";
-    TcpClient client;
-    public bool connected = false;
+    // TcpClient that connects to server
+    private TcpClient client;
 
     // Use this for initialization
     void Start () {
+        
         try
         {
             client = new TcpClient(host, portNumber);
-            connected = true;
+            client.Connect(host, portNumber);
         }
         catch (SocketException)
         {
             Debug.Log("Unable to connect to server");
             return;
         }
+        //client.GetStream();
     }
 	
 	// Update is called once per frame
 	void Update () {
-        
 
     }
 }
