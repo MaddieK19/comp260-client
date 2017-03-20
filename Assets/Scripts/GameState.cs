@@ -6,8 +6,12 @@ using UnityEngine;
  * GameState class that manages the other classes and updates them depending on the server state
  */
 public class GameState : MonoBehaviour {
+    // Player to update player state
     public GameObject player;
+    // 
     public TowerManager towerManager;
+    // TCPClient to send and recieve data through
+    public TCPClient client;
 
     Vector3 playerPreviousLocation;
 

@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Cell : MonoBehaviour {
 
+    string cellContent;
+
 	// Use this for initialization
 	void Start () {
 		
