@@ -15,7 +15,7 @@ public class TCPClient : MonoBehaviour {
     private int portNumber = 2222;
     private string host = "localhost";
     private int serverTimeout = 2500;
-    
+    int ticks =0;
     
     // TcpClient that connects to server
     private TcpClient client;
@@ -51,7 +51,11 @@ public class TCPClient : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
-
+        if (ticks < 1)
+        {
+            readFromStream();
+            writeToStream("Maddie");
+        }
 
     }
 
@@ -73,7 +77,7 @@ public class TCPClient : MonoBehaviour {
             if (bytes != null)
             {
                 returnData = Encoding.UTF8.GetString(bytes);
-                Debug.Log("This is what the host returned to you:" + returnData);
+                Debug.Log("Server says: " + returnData);
             }
         }
             return returnData;
