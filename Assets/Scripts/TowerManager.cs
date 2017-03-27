@@ -32,7 +32,7 @@ public class TowerManager : MonoBehaviour {
     // Instantiates a new tower and adds it to towers list
     void addTower(Vector3 towerPosition)
     {
-        GameObject newTower = (GameObject)Instantiate(towerPrefab, towerPosition, Quaternion.identity);
+        GameObject newTower = Instantiate(towerPrefab, towerPosition, Quaternion.identity) as GameObject;
         towers.Add(newTower);
     }
 
