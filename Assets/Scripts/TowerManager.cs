@@ -33,7 +33,7 @@ public class TowerManager : MonoBehaviour {
     void addTower(Vector3 towerPosition)
     {
         GameObject newTower = (GameObject)Instantiate(towerPrefab, towerPosition, Quaternion.identity);
-        towers.Add(towerPrefab);
+        towers.Add(newTower);
     }
 
     // Checks to see if the player has pressed a key
