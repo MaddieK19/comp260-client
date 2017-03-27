@@ -10,29 +10,50 @@ using System;
 /*
  *  TCPClient class that connects to the specified server
  */
-public class TCPClient : MonoBehaviour {
-    // int for the portnumber the client will connect to
+public class Client : MonoBehaviour
+{
+    /// int for the portnumber the client will connect to
     private int portNumber = 2222;
+    ///
     private string host = "localhost";
-    private int serverTimeout = 2500;
-    int ticks =0;
-    
-    // TcpClient that connects to server
+    /// int for how long a read from the network  stream can take before timing out
+    private int serverReadTimeout = 2500;
+    /// float to ensure the server is update at a fixed rate
+    float ticks = 0;
+
+    /// TcpClient that connects to server
     private TcpClient client;
-
-
-    private StreamWriter stream;
+    /// Network stream used to read and write from the server
     private NetworkStream netStream;
 
     // Use this for initialization
-    void Start () {
+    void Start()
+    {
         connectToServer();
         netStream = client.GetStream();
-        stream = new StreamWriter(netStream);
-        netStream.ReadTimeout = serverTimeout;
+        netStream.ReadTimeout = serverReadTimeout;
+        ticks = Time.deltaTime;
     }
 
-    // Attempts to connect to the server and get the network stream
+    // Update is called once per frame
+    void Update()
+    {
+        if (ticks < 1)
+        {
+            readFromStream();
+            writeToStream("Maddie");
+        }
+
+        else if (Time.deltaTime > ticks + 1 / 5)
+        {
+            ticks = Time.deltaTime;
+            readFromStream();
+            //writeToStream("Maddie");
+        }
+
+    }
+
+    /// Attempts to connect to the server and get the network stream
     void connectToServer()
     {
         try
@@ -46,32 +67,19 @@ public class TCPClient : MonoBehaviour {
             Debug.Log("Unable to connect to server");
             return;
         }
-     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        /*if (ticks < 1)
-        {
-            readFromStream();
-            writeToStream("Maddie");
-        }*/
-
     }
 
-
+    /// Reads data from the network stream
     string readFromStream()
     {
         string returnData = null;
         if (netStream.CanRead)
         {
-
             // Reads NetworkStream into a byte buffer.
             byte[] bytes = new byte[client.ReceiveBufferSize];
 
-            // Read can return anything from 0 to numBytesToRead. 
-            // This method blocks until at least one byte is read.
-            netStream.Read(bytes, 0, (int)client.ReceiveBufferSize);
+            // Read can return anything from 0 to numBytesToRead
+            netStream.Read(bytes, 0, client.ReceiveBufferSize);
 
             // Returns the data received from the host to the console.
             if (bytes != null)
@@ -80,13 +88,13 @@ public class TCPClient : MonoBehaviour {
                 Debug.Log("Server says: " + returnData);
             }
         }
-            return returnData;
-
+        return returnData;
     }
 
+
+    /// Takes a String and encodes the string and write it to the network stream
     void writeToStream(string dataToWrite)
     {
-
         if (netStream.CanWrite)
         {
             Byte[] sendBytes = Encoding.UTF8.GetBytes(dataToWrite);
