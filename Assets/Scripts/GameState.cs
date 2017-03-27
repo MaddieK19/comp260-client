@@ -11,25 +11,39 @@ public class GameState : MonoBehaviour {
     // 
     public TowerManager towerManager;
     // TCPClient to send and recieve data through
-    public TCPClient client;
+    public Client client;
+
+    public List<Command> commandQueue;
+
+    int maxNumberOfCommands = 5;
 
     Vector3 playerPreviousLocation;
 
 	// Use this for initialization
 	void Start () {
-        playerPreviousLocation = new Vector3(0,0,0);
+        playerPreviousLocation = player.transform.position;
     }
 	
 	// Update is called once per frame
-	void FixedUpdate () {
+	void Update () {
 		if (player.transform.position != playerPreviousLocation)
         {
-
+            checkPlayerPosition();
         }
 	}
 
-    void checkCellState(Cell cell)
+    void checkPlayerPosition()
     {
+        Command newCommand = new Command("move");
+        if (player.transform.position.x < playerPreviousLocation.x)
+            newCommand.addWord("south");
+        else if (player.transform.position.x > playerPreviousLocation.x)
+            newCommand.addWord("north");
+        if (player.transform.position.y < playerPreviousLocation.y)
+            newCommand.addWord("west");
+        else if (player.transform.position.y > playerPreviousLocation.y)
+            newCommand.addWord("east");
 
+        commandQueue.Add(newCommand);
     }
 }
