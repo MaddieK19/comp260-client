@@ -5,18 +5,13 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     // float for players movement speed
-    public float speed;
-    //
-    private Rigidbody2D rb2d;
-
+    public float speed = 0.5f;
+    
     // Use this for initialization
     void Start()
     {
-        rb2d = GetComponent<Rigidbody2D>();
-
     }
     
-    // TODO: change movement to not use forces
     void FixedUpdate()
     {
         //Store the current horizontal input in the float moveHorizontal.
@@ -28,8 +23,9 @@ public class PlayerController : MonoBehaviour
         //Use the two store floats to create a new Vector2 variable movement.
         Vector2 movement = new Vector2(moveHorizontal, moveVertical);
 
-        //Call the AddForce function of our Rigidbody2D rb2d supplying movement multiplied by speed to move our player.
-        rb2d.AddForce(movement * speed);
+        Vector2 pos2D = new Vector2(transform.position.x, transform.position.y);
+
+        transform.position = Vector2.MoveTowards(transform.position, pos2D + movement, speed);
     }
 
 }

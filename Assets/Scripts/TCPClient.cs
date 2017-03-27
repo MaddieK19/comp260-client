@@ -51,11 +51,11 @@ public class TCPClient : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
-        if (ticks < 1)
+        /*if (ticks < 1)
         {
             readFromStream();
             writeToStream("Maddie");
-        }
+        }*/
 
     }
 
