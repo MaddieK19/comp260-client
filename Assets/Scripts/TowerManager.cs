@@ -8,12 +8,12 @@ using UnityEngine;
 
 
 public class TowerManager : MonoBehaviour {
-    // List of all the active towers
+    /// List of all the active towers
     public List<GameObject> towers;
-    // Tower prefab used to make new towers
+    /// Tower prefab used to make new towers
     public GameObject towerPrefab;
-    // Player to get their position when building towers
-    public GameObject player;
+    /// GameObject to get their position when building towers
+    GameObject player;
     // int for the maximum number of towers a single player can build
     int maxTowerNumber = 10;
     // string for the key the player needs to press to build a tower
@@ -22,6 +22,7 @@ public class TowerManager : MonoBehaviour {
     // Use this for initialization
     void Start () {
         towers = new List<GameObject>();
+        player = GameObject.FindGameObjectWithTag("Player");
     }
 	
 	// Update is called once per frame
