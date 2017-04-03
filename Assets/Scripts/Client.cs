@@ -9,22 +9,27 @@ using System;
 
 /*
  *  TCPClient class that connects to the specified server
+ *  Used https://github.com/Fulviuus/unity-network-client/blob/master/Assets/networkSocket.cs for writeToStream
  */
 public class Client : MonoBehaviour
 {
     /// int for the portnumber the client will connect to
     private int portNumber = 2222;
-    ///
+    /// 
     private string host = "localhost";
     /// int for how long a read from the network  stream can take before timing out
-    private int serverReadTimeout = 2500;
+    private int serverReadTimeout = 25000;
     /// float to ensure the server is update at a fixed rate
     float ticks = 0;
+    float updateTime = 5;
 
     /// TcpClient that connects to server
     private TcpClient client;
     /// Network stream used to read and write from the server
     private NetworkStream netStream;
+
+    StreamWriter writer;
+    StreamReader reader;
 
     // Use this for initialization
     void Start()
@@ -33,22 +38,23 @@ public class Client : MonoBehaviour
         netStream = client.GetStream();
         netStream.ReadTimeout = serverReadTimeout;
         ticks = Time.deltaTime;
+        writer = new StreamWriter(netStream);
+        reader = new StreamReader(netStream);
+
+        readFromStream();
+        writeToStream("Maddie");
+
+        ticks = Time.time;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (ticks < 1)
+        if (client.Connected && Time.time > (ticks + updateTime))
         {
+            ticks = Time.time;
             readFromStream();
-            writeToStream("Maddie");
-        }
-
-        else if (Time.deltaTime > ticks + 1 / 5)
-        {
-            ticks = Time.deltaTime;
-            readFromStream();
-            //writeToStream("Maddie");
+            writeToStream("move south"); // send up game state
         }
 
     }
@@ -73,13 +79,22 @@ public class Client : MonoBehaviour
     string readFromStream()
     {
         string returnData = null;
-        if (netStream.CanRead)
+        
+        if (netStream.CanRead && client.Connected)
         {
             // Reads NetworkStream into a byte buffer.
             byte[] bytes = new byte[client.ReceiveBufferSize];
 
             // Read can return anything from 0 to numBytesToRead
-            netStream.Read(bytes, 0, client.ReceiveBufferSize);
+            try
+            {
+                netStream.Read(bytes, 0, client.ReceiveBufferSize);
+            }
+            catch (SocketException)
+            {
+                Debug.Log("Server disconnected");
+                connectToServer();
+            }
 
             // Returns the data received from the host to the console.
             if (bytes != null)
@@ -88,6 +103,7 @@ public class Client : MonoBehaviour
                 Debug.Log("Server says: " + returnData);
             }
         }
+        //netStream.Close();
         return returnData;
     }
 
@@ -95,19 +111,32 @@ public class Client : MonoBehaviour
     /// Takes a String and encodes the string and write it to the network stream
     void writeToStream(string dataToWrite)
     {
-        if (netStream.CanWrite)
+        dataToWrite = dataToWrite + "\r\n";
+        try
         {
-            Byte[] sendBytes = Encoding.UTF8.GetBytes(dataToWrite);
-            netStream.Write(sendBytes, 0, sendBytes.Length);
+            writer.Write(dataToWrite);
+            writer.Flush();
+        }
+        catch (SocketException)
+        {
+            Debug.Log("Server took too long to respond");
         }
     }
 
     /// Disconnects from server
     void disconnectFromServer()
     {
-        netStream.Close();
-        client.GetStream().Close();
-        client.Close();
+        try
+        {
+            netStream.Close();
+            client.GetStream().Close();
+            client.Close();
+        }
+        catch (NullReferenceException)
+        {
+            Debug.Log("No connection");
+            return;
+        }
     }
     /// Disconnects from server when applicationis closed
     private void OnApplicationQuit()
