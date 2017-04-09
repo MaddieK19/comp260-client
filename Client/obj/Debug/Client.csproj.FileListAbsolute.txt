@@ -1,0 +1,6 @@
+G:\Documents\GitHub\COMP260\Client\Client\bin\Debug\Client.exe.config
+G:\Documents\GitHub\COMP260\Client\Client\bin\Debug\Client.exe
+G:\Documents\GitHub\COMP260\Client\Client\bin\Debug\Client.pdb
+G:\Documents\GitHub\COMP260\Client\Client\obj\Debug\Client.csprojResolveAssemblyReference.cache
+G:\Documents\GitHub\COMP260\Client\Client\obj\Debug\Client.exe
+G:\Documents\GitHub\COMP260\Client\Client\obj\Debug\Client.pdb
