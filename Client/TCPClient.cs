@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 using System.Net;
 using System.Net.Sockets;
 using System.IO;
-
+/*
+ *  TCPClient class that connects to the specified server
+ *  Used https://github.com/Fulviuus/unity-network-client/blob/master/Assets/networkSocket.cs for writeToStream
+ */
 namespace Client
 {
     class TCPClient
@@ -14,15 +17,12 @@ namespace Client
         /// int for the portnumber the client will connect to
         private int portNumber = 2222;
         /// 
-        private string host = "178.62.110.12";//"localhost";
+        private string host = "localhost"; //"178.62.110.12";
         /// int for how long a read from the network  stream can take before timing out
         private int serverReadTimeout = 25000;
-        /// float to ensure the server is update at a fixed rate
-        float ticks = 0;
-        float updateTime = 5;
 
         /// TcpClient that connects to server
-        private TcpClient client;
+        public TcpClient client;
         /// Network stream used to read and write from the server
         private NetworkStream netStream;
 
@@ -36,39 +36,26 @@ namespace Client
             netStream.ReadTimeout = serverReadTimeout;
             writer = new StreamWriter(netStream);
             reader = new StreamReader(netStream);
-            readFromStream();
-        }
-        // Update is called once per frame
-        void Update()
-        {
-            if (client.Connected)
-            {
-                string localDate = DateTime.Now.ToShortTimeString();
-
-                readFromStream();
-                writeToStream("move south"); // send up game state
-            }
-
         }
 
         /// Attempts to connect to the server and get the network stream
         void connectToServer()
         {
+            client = new TcpClient(host, portNumber);
             try
             {
-                client = new TcpClient(host, portNumber);
                 client.Connect(host, portNumber);
-                Console.Write("Connected to server");
+                Console.WriteLine("Connected to server");
             }
             catch (SocketException)
             {
-                Console.Write("Unable to connect to server");
+                Console.WriteLine("Unable to connect to server");
                 return;
             }
         }
 
         /// Reads data from the network stream
-        string readFromStream()
+        public string readFromStream()
         {
             string returnData = null;
 
@@ -84,24 +71,22 @@ namespace Client
                 }
                 catch (SocketException)
                 {
-                    Console.Write("Server disconnected");
+                    Console.WriteLine("Server disconnected");
                     connectToServer();
                 }
-
                 // Returns the data received from the host to the console.
                 if (bytes != null)
                 {
                     returnData = Encoding.UTF8.GetString(bytes);
-                    Console.Write("Server says: " + returnData);
+                    Console.WriteLine("Server says: " + returnData);
                 }
             }
-            //netStream.Close();
             return returnData;
         }
 
 
         /// Takes a String and encodes the string and write it to the network stream
-        void writeToStream(string dataToWrite)
+        public void writeToStream(string dataToWrite)
         {
             dataToWrite = dataToWrite + "\r\n";
             try
@@ -111,7 +96,7 @@ namespace Client
             }
             catch (SocketException)
             {
-                Console.Write("Server took too long to respond");
+                Console.WriteLine("Server took too long to respond");
             }
         }
 
@@ -126,9 +111,16 @@ namespace Client
             }
             catch (NullReferenceException)
             {
-                Console.Write("No connection");
+                Console.WriteLine("No connection");
                 return;
             }
         }
+
+        /// Disconnects from server when application is closed
+        void OnProcessExit(object sender, EventArgs e)
+        {
+            disconnectFromServer();
+        }
     }
 }
+
