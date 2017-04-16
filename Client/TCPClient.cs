@@ -14,21 +14,23 @@ namespace Client
 {
     class TCPClient
     {
-        /// int for the portnumber the client will connect to
+        //! int for the portnumber the client will connect to
         private int portNumber = 2222;
-        /// 
+        //! String for the host
         private string host = "localhost"; //"178.62.110.12";
-        /// int for how long a read from the network  stream can take before timing out
+        //! int for how long a read from the network  stream can take before timing out
         private int serverReadTimeout = 25000;
 
-        /// TcpClient that connects to server
+        //! TcpClient that connects to server
         public TcpClient client;
-        /// Network stream used to read and write from the server
+        //! Network stream used to read and write from the server
         private NetworkStream netStream;
-
+        //! StreamWriter for writing data to the network stream
         StreamWriter writer;
+        //! StreamWriter for reading data from the network stream
         StreamReader reader;
-        // Use this for initialization
+
+        //! Connects to the server and initialises the streams
         public void initServerConnection()
         {
             connectToServer();
@@ -38,7 +40,7 @@ namespace Client
             reader = new StreamReader(netStream);
         }
 
-        /// Attempts to connect to the server and get the network stream
+        //! Attempts to connect to the server
         void connectToServer()
         {
             client = new TcpClient(host, portNumber);
@@ -54,17 +56,16 @@ namespace Client
             }
         }
 
-        /// Reads data from the network stream
+        //! Reads data from the network stream
         public string readFromStream()
         {
             string returnData = null;
 
             if (netStream.CanRead && client.Connected)
             {
-                // Reads NetworkStream into a byte buffer.
+                // Reads netStream into a byte buffer
                 byte[] bytes = new byte[client.ReceiveBufferSize];
 
-                // Read can return anything from 0 to numBytesToRead
                 try
                 {
                     netStream.Read(bytes, 0, client.ReceiveBufferSize);
@@ -72,7 +73,6 @@ namespace Client
                 catch (SocketException)
                 {
                     Console.WriteLine("Server disconnected");
-                    connectToServer();
                 }
                 // Returns the data received from the host to the console.
                 if (bytes != null)
@@ -85,7 +85,7 @@ namespace Client
         }
 
 
-        /// Takes a String and encodes the string and write it to the network stream
+        //! Takes a String and encodes the string and write it to the network stream
         public void writeToStream(string dataToWrite)
         {
             dataToWrite = dataToWrite + "\r\n";
@@ -100,7 +100,7 @@ namespace Client
             }
         }
 
-        /// Disconnects from server
+        //! Closes network streams and disconnects from server
         public void disconnectFromServer()
         {
             try
@@ -114,9 +114,13 @@ namespace Client
                 Console.WriteLine("No connection");
                 return;
             }
+            catch (InvalidOperationException)
+            {
+
+            }
         }
 
-        /// Disconnects from server when application is closed
+        //! Disconnects from server when application is closed
         void OnProcessExit(object sender, EventArgs e)
         {
             disconnectFromServer();
