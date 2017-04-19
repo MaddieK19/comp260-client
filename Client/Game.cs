@@ -13,8 +13,11 @@ namespace Client
         TCPClient client;
         //! Timer to determine when to send data to server
         Timer timer;
+
+        int ticks = 0;
+        int previousTick = 0;
         //! float for how often to send to server
-        float serverUpdateInterval = 50;
+        float serverUpdateInterval = 200;
         //! List of the commands the player has entered
         List<String> commands;
         //! String to store the players last command
@@ -37,7 +40,7 @@ namespace Client
         void initTimer()
         {
             timer = new Timer();
-            timer.Elapsed += new ElapsedEventHandler(sendCommands);
+            timer.Elapsed += new ElapsedEventHandler(tick);
             timer.Interval = serverUpdateInterval;
             timer.Enabled = true;
         }
@@ -46,14 +49,29 @@ namespace Client
         {
             while (gameRunning)
             {
-                client.readFromStream();
-                inputCommand();
-                client.readFromStream();
+                if (ticks > previousTick)
+                {
+                    update();
+                    previousTick++;
+                }
+                //inputCommand();
             }
         }
 
         //! sends every entry in commands to the server
-        private void sendCommands(object source, ElapsedEventArgs e) {
+        private void tick(object source, ElapsedEventArgs e) {
+            ticks++;
+        }
+
+        void update()
+        {
+            client.readFromStream();
+            sendCommands();
+            inputCommand();
+        }
+
+        void sendCommands()
+        {
             for (int i = 0; i < commands.Count; i++)
             {
                 client.writeToStream(commands[i]);
