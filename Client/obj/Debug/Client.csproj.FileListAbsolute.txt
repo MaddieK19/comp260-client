@@ -13,3 +13,6 @@ C:\Users\Maddie\Documents\GitHub\comp260-client\Client\obj\Debug\Client.pdb
 C:\Users\Maddie\Documents\GitHub\comp260-client\Client\bin\Debug\Client.exe
 C:\Users\Maddie\Documents\GitHub\comp260-client\Client\bin\Debug\Client.pdb
 C:\Users\Maddie\Documents\GitHub\comp260-client\Client\obj\Debug\Client.csprojResolveAssemblyReference.cache
+G:\Documents\GitHub\COMP260\comp260-client\Client\bin\Debug\Client.exe
+G:\Documents\GitHub\COMP260\comp260-client\Client\bin\Debug\Client.pdb
+G:\Documents\GitHub\COMP260\comp260-client\Client\obj\Debug\Client.csprojResolveAssemblyReference.cache

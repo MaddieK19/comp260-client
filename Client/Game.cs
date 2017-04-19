@@ -14,7 +14,7 @@ namespace Client
         //! Timer to determine when to send data to server
         Timer timer;
         //! float for how often to send to server
-        float serverUpdateInterval = 1000;
+        float serverUpdateInterval = 50;
         //! List of the commands the player has entered
         List<String> commands;
         //! String to store the players last command
@@ -70,11 +70,11 @@ namespace Client
             {
                 exitProgram();
             }
-            if (commands.Count < maxCommands)
+            if (commands.Count < maxCommands && inputText != "")
             {
                 commands.Add(inputText);
             }
-            inputText = null;
+           
         }
 
         void exitProgram()

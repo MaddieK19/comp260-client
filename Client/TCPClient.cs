@@ -15,7 +15,7 @@ namespace Client
     class TCPClient
     {
         //! int for the portnumber the client will connect to
-        private int portNumber = 2222;
+        private int portNumber = 25565;
         //! String for the host
         private string host = "localhost"; //"178.62.110.12";
         //! int for how long a read from the network  stream can take before timing out
@@ -45,15 +45,15 @@ namespace Client
         {
             client = new TcpClient(host, portNumber);
             try
-            {
-                client.Connect(host, portNumber);
-                Console.WriteLine("Connected to server");
-            }
-            catch (SocketException)
-            {
-                Console.WriteLine("Unable to connect to server");
-                return;
-            }
+             {
+                 client.Connect(host, portNumber);
+                 Console.WriteLine("Connected to server");
+             }
+             catch (SocketException)
+             {
+                 Console.WriteLine("Unable to connect to server");
+                 return;
+             }
         }
 
         //! Reads data from the network stream
@@ -61,9 +61,9 @@ namespace Client
         {
             string returnData = null;
 
-            if (netStream.CanRead && client.Connected)
+            if (netStream.CanRead && netStream.DataAvailable)
             {
-                // Reads netStream into a byte buffer
+                /*// Reads netStream into a byte buffer
                 byte[] bytes = new byte[client.ReceiveBufferSize];
 
                 try
@@ -78,9 +78,15 @@ namespace Client
                 if (bytes != null)
                 {
                     returnData = Encoding.UTF8.GetString(bytes);
-                    Console.WriteLine("Server says: " + returnData);
-                }
+                   
+                }*/
+                //while (netStream.DataAvailable)
+               // {
+                    Console.WriteLine("Server says: " + reader.ReadLine());
+               // }
+               // returnData = reader.ReadLine();
             }
+            //Console.WriteLine("Server says: " + returnData);
             return returnData;
         }
 
