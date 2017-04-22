@@ -8,7 +8,7 @@ using System.Net.Sockets;
 using System.IO;
 /*
  *  TCPClient class that connects to the specified server
- *  Used https://github.com/Fulviuus/unity-network-client/blob/master/Assets/networkSocket.cs for writeToStream
+ *  Used https://github.com/Fulviuus/unity-network-client/blob/master/Assets/networkSocket.cs for writeToStream()
  */
 namespace Client
 {
@@ -38,13 +38,13 @@ namespace Client
                 initStreams();
             else
             {
-                Console.WriteLine("Unable to connect to server.");
+                Console.WriteLine("Connection failed.");
                 Console.ReadLine();
                 Environment.Exit(0);
             }
                 
         }
-
+        //! Gets streams from client
         private void initStreams()
         {
             netStream = client.GetStream();
@@ -64,7 +64,7 @@ namespace Client
              }
              catch (SocketException)
              {
-                 Console.WriteLine("Unable to connect to server");
+                 Console.WriteLine("Socket exception");
                  return;
              }
             catch (NullReferenceException)
