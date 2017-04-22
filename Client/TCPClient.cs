@@ -34,6 +34,19 @@ namespace Client
         public void initServerConnection()
         {
             connectToServer();
+            if(client != null)
+                initStreams();
+            else
+            {
+                Console.WriteLine("Unable to connect to server.");
+                Console.ReadLine();
+                Environment.Exit(0);
+            }
+                
+        }
+
+        private void initStreams()
+        {
             netStream = client.GetStream();
             netStream.ReadTimeout = serverReadTimeout;
             writer = new StreamWriter(netStream);
@@ -43,17 +56,22 @@ namespace Client
         //! Attempts to connect to the server
         void connectToServer()
         {
-            client = new TcpClient(host, portNumber);
             try
              {
-                 client.Connect(host, portNumber);
-                 Console.WriteLine("Connected to server");
+                client = new TcpClient(host, portNumber);
+                client.Connect(host, portNumber);
+                 //Console.WriteLine("Connected to server");
              }
              catch (SocketException)
              {
                  Console.WriteLine("Unable to connect to server");
                  return;
              }
+            catch (NullReferenceException)
+            {
+                Console.WriteLine("Unable to connect to server");
+                return;
+            }
         }
 
         //! Reads data from the network stream
@@ -64,7 +82,7 @@ namespace Client
             if (netStream.CanRead && netStream.DataAvailable)
             {
                 returnData = reader.ReadLine();
-                Console.WriteLine("Server says: " + returnData);
+                Console.WriteLine(returnData);
             }
             return returnData;
         }
@@ -93,16 +111,14 @@ namespace Client
                 netStream.Close();
                 client.GetStream().Close();
                 client.Close();
+                client.Client.Shutdown(SocketShutdown.Both);
             }
             catch (NullReferenceException)
             {
                 Console.WriteLine("No connection");
                 return;
             }
-            catch (InvalidOperationException)
-            {
-
-            }
+           
         }
 
         //! Disconnects from server when application is closed

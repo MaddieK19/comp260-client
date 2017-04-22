@@ -4,6 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
+/*!
+ * Game class 
+ */
 
 namespace Client
 {
@@ -13,11 +16,12 @@ namespace Client
         TCPClient client;
         //! Timer to determine when to send data to server
         Timer timer;
-
+        //! int for how many times the timers ticked
         int ticks = 0;
+        //! int for how many ticks had passed on the previous update
         int previousTick = 0;
         //! float for how often to send to server
-        float serverUpdateInterval = 200;
+        float serverUpdateInterval = 1000;
         //! List of the commands the player has entered
         List<String> commands;
         //! String to store the players last command
@@ -26,6 +30,8 @@ namespace Client
         int maxCommands = 5;
 
         bool gameRunning = true;
+
+        String playerName = null;
           
  
         //! Constructor
@@ -34,7 +40,6 @@ namespace Client
             client = new TCPClient();
             client.initServerConnection();
             commands = new List<String>();
-            initTimer();
         }
         //! intialises the timer
         void initTimer()
@@ -44,21 +49,36 @@ namespace Client
             timer.Interval = serverUpdateInterval;
             timer.Enabled = true;
         }
+
+        void getPlayerName()
+        {
+            playerName = Console.ReadLine();
+        }
+
         //!
         public void run()
         {
+            client.readFromStream();
+            getPlayerName();
+            client.writeToStream(playerName);
+            Console.WriteLine("Press enter to continue...");
+            Console.WriteLine("");
+            initTimer();
+
             while (gameRunning)
             {
+                client.readFromStream();
                 if (ticks > previousTick)
                 {
-                    update();
-                    previousTick++;
+                    inputCommand();
+                    //update();
+                    previousTick = ticks;
                 }
-                //inputCommand();
+                
             }
         }
 
-        //! sends every entry in commands to the server
+        //! Increases ticks
         private void tick(object source, ElapsedEventArgs e) {
             ticks++;
         }
@@ -83,7 +103,9 @@ namespace Client
         //! Takes player input and adds it to commands
         void inputCommand()
         {
+            Console.Write("Enter Text: ");
             inputText = Console.ReadLine();
+            
             if (inputText == "quit")
             {
                 exitProgram();
@@ -92,9 +114,14 @@ namespace Client
             {
                 commands.Add(inputText);
             }
-           
-        }
+            if (inputText != null)
+            {
+                client.writeToStream(inputText);
+            }
+            inputText = null;
 
+        }
+        //! Closes the connection with the server, the tcpclient and the application
         void exitProgram()
         {
             gameRunning = false;
