@@ -63,30 +63,9 @@ namespace Client
 
             if (netStream.CanRead && netStream.DataAvailable)
             {
-                /*// Reads netStream into a byte buffer
-                byte[] bytes = new byte[client.ReceiveBufferSize];
-
-                try
-                {
-                    netStream.Read(bytes, 0, client.ReceiveBufferSize);
-                }
-                catch (SocketException)
-                {
-                    Console.WriteLine("Server disconnected");
-                }
-                // Returns the data received from the host to the console.
-                if (bytes != null)
-                {
-                    returnData = Encoding.UTF8.GetString(bytes);
-                   
-                }*/
-                //while (netStream.DataAvailable)
-               // {
-                    Console.WriteLine("Server says: " + reader.ReadLine());
-               // }
-               // returnData = reader.ReadLine();
+                returnData = reader.ReadLine();
+                Console.WriteLine("Server says: " + returnData);
             }
-            //Console.WriteLine("Server says: " + returnData);
             return returnData;
         }
 
